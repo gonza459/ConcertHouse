@@ -8,16 +8,16 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import requests
 import json
 
-spotify = spotipy.Spotify()
-results = spotify.search(q='artist:' + name, type='artist')
-print results
 username = raw_input('Enter your Spotify username: ')
-
-artist = raw_input('Artist: ')
+name = raw_input('Artist: ')
 city = raw_input('City: ')
 #venue = raw_input('Venue: ')
 #int day, month, year
 #date = raw_input('Month: ' + month + 'Day: ' + day +  'Year: ' + year)
+
+spotify = spotipy.Spotify()
+results = spotify.search(q='artist:' + name, type='artist')
+print results
 
 #setlist.fm API
 setCONSUMER_KEY = 'ecc895c8-fb79-4eab-be35-7d04744a15aa'
