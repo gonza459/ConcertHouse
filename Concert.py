@@ -6,44 +6,54 @@ import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import requests
+import os
 import json
-
-username = raw_input('Enter your Spotify username: ')
-name = raw_input('Artist: ')
-city = raw_input('City: ')
-#venue = raw_input('Venue: ')
-#int day, month, year
-#date = raw_input('Month: ' + month + 'Day: ' + day +  'Year: ' + year)
-
-spotify = spotipy.Spotify()
-results = spotify.search(q='artist:' + name, type='artist')
-print results
 
 #setlist.fm API
 setCONSUMER_KEY = 'ecc895c8-fb79-4eab-be35-7d04744a15aa'
+headers = {'Accept': 'application/json', 'x-api-key': setCONSUMER_KEY}
 
-#spotify API
-spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
-spotCONSUMER_SECRET = 'ce6c55f9f3c343bb919d917257661a3b'
-auth = spotipy.Spotify(spotCONSUMER_KEY, spotCONSUMER_SECRET)
 
-client_credentials_manager = SpotifyClientCredentials(auth)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+#Get the MusicBrainz ID for the artist
+def getArtistID(header):
+    name = raw_input("Enter artist name: ")
+    #Replace any spaces with %20.
+    #TODO : Add correct encoding so it can also manage non ANSI signs
+    artist = artistToFind.replace(" ", "%20")
+    url = "https://api.setlist.fm/rest/1.0/search/artists?artistName=" + artist + "&p=1&sort=relevance"
+    myResponse = requests.get(url, headers=header, verify=True)
+    jData = json.loads(myResponse.content)
+    for key in jData['artist']:
+        return key['mbid']
 
-if len(sys.argv) > 3:
-    username = sys.argv[1]
-    playlist_id = sys.argv[2]
-    track_ids = sys.argv[3:]
+#Get a setlist
+def getSetlist(artistID, header):
+    url = "https://api.setlist.fm/rest/1.0/artist/" + artistID + "/setlists"
+    myResponse = requests.get(url, headers=header, verify=True)
+    jDataSetSetList = json.loads(myResponse.content)
+    #TODO : Add method to select more than latest setlist
+    if(myResponse.ok):
+        for key in jDataSetSetList['setlist']:
+            #Get the first setlist that contains more than 0 songs
+            #This is to avoid events that don't have a populated setlist
+            if len(key.get('sets').get('set')) > 0:
+                return key
+    else:
+        #TODO: Add some real error handling
+        return myResponse
+
+print 'Please enter how you wish to search for looking up the setlist'
+print
+selection = raw_input('Enter 1 for artist name, 2 for date, 3 for venue: ')
+print
+if selection == '1':
+    getArtistID(headers)
+elif selection == '2':
+    print('Enter the date.')
+    month = raw_input('Enter the month: ')
+    day = raw_input('Enter the day: ')
+    year  = raw_input('Enter the year: ')
+elif selection == '3':
+    venue = raw_input('Enter the venue name: ')
 else:
-    print "Usage: %s username playlist_id track_id ..." % (sys.argv[0],)
-    sys.exit()
-
-scope = 'playlist-modify-public'
-token = util.prompt_for_user_token(username, scope)
-
-if token:
-    sp.trace = False
-    results = sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-    print results
-else:
-    print "Can't get token for", username
+    print('Not a valid input. Try again.')
