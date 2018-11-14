@@ -11,9 +11,8 @@ import json
 #spotify API
 spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
 spotCONSUMER_SECRET = 'ce6c55f9f3c343bb919d917257661a3b'
-spotREDIRECT_URL = 'SpotifyTestApp://callback'
+spotREDIRECT_URI = 'SpotifyTestApp://callback'
 
-#Header for Spotify
 username = ""
 token = util.prompt_for_user_token(
     username,
@@ -31,6 +30,6 @@ def createSpotifyToken(token):
     spotify = spotipy.Spotify(auth=token)
     return spotify
 
-def searchTermsArtist(name):
-    results = spotipy.search(q='artist:' + name, type='artist')
+def searchTermsArtist(artistName):
+    results = spotipy.search(q='artist:' + Name, type='artist')
     print results
