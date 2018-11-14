@@ -40,6 +40,7 @@ def getArtistID(header, name):
     for key in data['artist']:
         return key['mbid']
 
+#Get the MusicBrainz ID for the venue
 def getCityID(header):
     venue = raw_input('Enter the venue name: ')
     #Replace any spaces with %20.
@@ -56,8 +57,9 @@ def getArtistSetlist(artistID, header):
     response = requests.get(url, headers=header, verify=True)
     data = response.json()
     if(response.ok):
+        #TODO: put in for loop to go through the pages so to get the full data of setlists
         for key in data['setlist']:
-            #Get the first setlist that contains more than 0 songs
+            #Get the first setlist that contains more than 0 songs so to not get back a list of a not performed concert yet
             if len(key.get('sets').get('set')) > 0:
                 return key
     else:
@@ -69,8 +71,7 @@ def getVenueSetlist(cityID, header):
     data = response.json()
     if(response.ok):
         for key in data['setlist']:
-            #Get the first setlist that contains more than 0 songs
-            #This is to avoid events that don't have a populated setlist
+            #Get the first setlist that contains more than 0 songs so to not get back a list of a not performed concert yet
             if len(key.get('sets').get('set')) > 0:
                 return key
     else:
