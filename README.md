@@ -27,3 +27,7 @@ https://teamtreehouse.com/community/what-is-redirect-uri
 
 JSON
 https://docs.python.org/2/library/json.html
+
+REST API tutorials
+https://www.youtube.com/watch?v=7YcW25PHnAA
+https://www.youtube.com/watch?v=OuKvmeudLII&t=46s
