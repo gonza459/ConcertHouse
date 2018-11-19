@@ -3,10 +3,13 @@ import sys
 
 import spotipy
 import spotipy.util as util
+import spotipy.client as client
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import requests
 import json
+
+spotify = spotipy.Spotify()
 
 #spotify API
 spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
@@ -30,6 +33,6 @@ def createSpotifyToken(token):
     spotify = spotipy.Spotify(auth=token)
     return spotify
 
-def searchTermsArtist(artistName):
-    results = spotipy.search(q='artist:' + Name, type='artist')
-    print results
+def searchTermsArtist(spotify, artistName):
+    results = spotify.search(q='' + artistName, type='artist')
+    return results

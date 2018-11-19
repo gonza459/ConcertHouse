@@ -87,9 +87,12 @@ print
 if selection == '1':
     name = raw_input("Enter artist name: ")
     artistID = getArtistID(headers, name)
-    spotArtist = PlaylistMaker.searchTermsArtist(name)
+    spotArtist = PlaylistMaker.searchTermsArtist(spotify, name)
+    print 'Setlist: '
     print artistID
     print getArtistSetlist(artistID, headers) #print data from setlist.fm
+    print
+    print 'Spotify: '
     print spotArtist
 elif selection == '2':
     print('Enter the date.')
