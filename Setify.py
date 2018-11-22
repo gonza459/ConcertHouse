@@ -12,8 +12,10 @@ import json
 import SpotifyPlaylist
 import SearchSetlist
 
+set = []
+
 #spotify API
-username = ""
+username = "1256796696"
 token = util.prompt_for_user_token(
     username,
     scope = 'playlist-modify-private playlist-modify-public',
@@ -22,8 +24,9 @@ token = util.prompt_for_user_token(
     #Enter Spotify API Secret
     client_secret ='ce6c55f9f3c343bb919d917257661a3b',
     #Enter Spotify API Redirect URI
-    redirect_uri='SpotifyTestApp://callback'
+    redirect_uri='http://localhost/'
 )
+#create session token for spotify
 spotify = SpotifyPlaylist.createSpotifyToken(token)
 
 #setlist.fm API
@@ -33,29 +36,43 @@ headers = {'Accept': 'application/json', 'x-api-key': setCONSUMER_KEY}
 
 print spotify
 print 'Please enter how you wish to search for looking up the setlist'
+selection = ''
 print
-selection = raw_input('Enter 1 for artist name, 2 for date, 3 for venue: ')
-print
+while selection != '1' or '2':
+    selection = raw_input('Enter 1 for artist name or 2 for venue: ')
 
-#Input search term type (artist, date, or city/venue)
-if selection == '1':
-    name = raw_input("Enter artist name: ")
-    artistID = SearchSetlist.getArtistID(headers, name)
-    spotArtist = SpotifyPlaylist.searchTermsArtist(spotify, name)
-    print 'Setlist: '
-    print artistID
-    print SearchSetlist.getArtistSetlist(artistID, headers) #print data from setlist.fm
-    print
-    print 'Spotify: '
-    print spotArtist
-elif selection == '2':
-    print('Enter the date.')
-    month = raw_input('Enter the month: ')
-    day = raw_input('Enter the day: ')
-    year  = raw_input('Enter the year: ')
-elif selection == '3':
-    cityID = SearchSetlist.getCityID(headers)
-    print cityID
-    print SearchSetlist.getVenueSetlist(cityID, headers)
-else:
-    print('Not a valid input. Try again.')
+    #Input search term type (artist, or city/venue)
+    if selection == '1':
+        name = raw_input("Enter artist name: ")
+        #Searches setlist.fm data for artist mbid
+        artistID = SearchSetlist.getArtistID(headers, name)
+        #searches spotify data for info relating to artist name
+        spotArtist = SpotifyPlaylist.searchTermsArtist(spotify, name)
+        print 'Setlist: '
+        print artistID
+        print SearchSetlist.getArtistSetlist(artistID, headers) #print data from setlist.fm
+        print
+        print 'Spotify: '
+        print spotArtist
+        playlistName = 'test'
+        playlistDescription = 'test'
+        playlist = spotify.user_playlist_create(username, playlistName, playlistDescription)
+        pprint.pprint(playlist)
+        break
+
+    #takes in year
+    #elif selection == '2':
+    #    print('Enter the year')
+
+    #Search for most recent setlist according to venue name
+    elif selection == '2':
+        venue = raw_input('Enter the venue name: ')
+        #searches setlit.fm data for venue id
+        cityID = SearchSetlist.getVenueID(headers, venue)
+        #print venue ID
+        print cityID
+        print SearchSetlist.getVenueSetlist(cityID, headers)
+        break
+
+    else:
+        print('Not a valid input. Try again.')

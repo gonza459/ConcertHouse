@@ -11,6 +11,8 @@ import json
 
 import SpotifyPlaylist
 
+tracks = []
+
 #Get the MusicBrainz ID for the artist
 def getArtistID(header, name):
     #Replace any spaces with %20.
@@ -19,17 +21,6 @@ def getArtistID(header, name):
     response = requests.get(url, headers=header, verify=True)
     data = response.json()
     for key in data['artist']:
-        return key['mbid']
-
-#Get the MusicBrainz ID for the venue
-def getCityID(header):
-    venue = raw_input('Enter the venue name: ')
-    #Replace any spaces with %20.
-    city = venue.replace(" ", "%20")
-    url = "https://api.setlist.fm/rest/1.0/search/venues?venueName=" + venue + "&p=1&sort=relevance"
-    response = requests.get(url, headers=header, verify=True)
-    data = response.json()
-    for key in data['city']:
         return key['mbid']
 
 #Get a setlist
@@ -46,8 +37,18 @@ def getArtistSetlist(artistID, header):
     else:
         return response
 
+#Get the ID for the venue
+def getVenueID(header, name):
+    #Replace any spaces with %20.
+    city = name.replace(" ", "%20")
+    url = "https://api.setlist.fm/rest/1.0/search/venues?name=" + city + "&p=1&sort=relevance"
+    response = requests.get(url, headers=header, verify=True)
+    data = response.json()
+    for key in data['venue']:
+        return key['id']
+
 def getVenueSetlist(cityID, header):
-    url = "https://api.setlist.fm/rest/1.0/search/venue/" + cityID + "/setlists"
+    url = "https://api.setlist.fm/rest/1.0/venue/" + cityID + "/setlists"
     response = requests.get(url, headers=header, verify=True)
     data = response.json()
     if(response.ok):
@@ -57,3 +58,11 @@ def getVenueSetlist(cityID, header):
                 return key
     else:
         return response
+        
+def getFullSetlist(artistName, year, venue, header):
+    url = "https://api.setlist.fm/rest/1.0/search/setlists/"
+    response = requests.get(url, {'artistName': artistName, 'date': year}, headers = header)
+    data = response.json()
+    if(response.ok):
+        for key in data['setlist']:
+            return key['id']

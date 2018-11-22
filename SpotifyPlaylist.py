@@ -10,13 +10,14 @@ import requests
 import json
 
 spotify = spotipy.Spotify()
+tracks = []
 
 #spotify API
 spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
 spotCONSUMER_SECRET = 'ce6c55f9f3c343bb919d917257661a3b'
 spotREDIRECT_URI = 'SpotifyTestApp://callback'
 
-username = ""
+username = "1256796696"
 token = util.prompt_for_user_token(
     username,
     scope = 'playlist-modify-private playlist-modify-public',
@@ -32,6 +33,11 @@ token = util.prompt_for_user_token(
 def createSpotifyToken(token):
     spotify = spotipy.Spotify(auth=token)
     return spotify
+
+def createSpotifyPlaylsit(username, playlistName, playlistDescription):
+    playlists = spotify.user_playlist_create(username, playlistName,
+                                        playlistDescription)
+    return pprint.pprint(playlists)
 
 def searchTermsArtist(spotify, artistName):
     results = spotify.search(q='' + artistName, type='artist')
