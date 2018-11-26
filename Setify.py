@@ -15,7 +15,7 @@ import SearchSetlist
 set = []
 
 #spotify API
-username = "1256796696"
+username = ""
 token = util.prompt_for_user_token(
     username,
     scope = 'playlist-modify-private playlist-modify-public',
@@ -24,7 +24,7 @@ token = util.prompt_for_user_token(
     #Enter Spotify API Secret
     client_secret ='ce6c55f9f3c343bb919d917257661a3b',
     #Enter Spotify API Redirect URI
-    redirect_uri='http://localhost/'
+    redirect_uri='http://spotify.com/us'
 )
 #create session token for spotify
 spotify = SpotifyPlaylist.createSpotifyToken(token)
@@ -56,8 +56,8 @@ while selection != '1' or '2':
         print spotArtist
         playlistName = 'test'
         playlistDescription = 'test'
-        playlist = spotify.user_playlist_create(username, playlistName, playlistDescription)
-        pprint.pprint(playlist)
+        username = spotify.me()['id']
+        playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName, playlistDescription)
         break
 
     #takes in year

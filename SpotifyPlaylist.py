@@ -15,9 +15,9 @@ tracks = []
 #spotify API
 spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
 spotCONSUMER_SECRET = 'ce6c55f9f3c343bb919d917257661a3b'
-spotREDIRECT_URI = 'SpotifyTestApp://callback'
+spotREDIRECT_URI = 'http://setify.onuniverse.com/callback/'
 
-username = "1256796696"
+username = raw_input("Enter your username: ")
 token = util.prompt_for_user_token(
     username,
     scope = 'playlist-modify-private playlist-modify-public',
@@ -26,7 +26,7 @@ token = util.prompt_for_user_token(
     #Enter Spotify API Secret
     client_secret ='ce6c55f9f3c343bb919d917257661a3b',
     #Enter Spotify API Redirect URI
-    redirect_uri='SpotifyTestApp://callback'
+    redirect_uri='http://spotify.com/us'
 )
 
 #Create a session token for spotipy
@@ -34,7 +34,7 @@ def createSpotifyToken(token):
     spotify = spotipy.Spotify(auth=token)
     return spotify
 
-def createSpotifyPlaylsit(username, playlistName, playlistDescription):
+def createSpotifyPlaylist(token, username, playlistName, playlistDescription):
     playlists = spotify.user_playlist_create(username, playlistName,
                                         playlistDescription)
     return pprint.pprint(playlists)
