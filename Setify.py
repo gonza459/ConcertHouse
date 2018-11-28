@@ -15,9 +15,8 @@ import SearchSetlist
 set = []
 
 #spotify API
-username = ""
 token = util.prompt_for_user_token(
-    username,
+    username = raw_input("Enter your username: "),
     scope = 'playlist-modify-private playlist-modify-public',
     #Enter Spotify API ID
     client_id ='3817588cd345435c86c9a60e6c0cb70a',
@@ -28,6 +27,7 @@ token = util.prompt_for_user_token(
 )
 #create session token for spotify
 spotify = SpotifyPlaylist.createSpotifyToken(token)
+username = spotify.me()['id']
 
 #setlist.fm API
 setCONSUMER_KEY = 'ecc895c8-fb79-4eab-be35-7d04744a15aa'
@@ -38,7 +38,7 @@ print spotify
 print 'Please enter how you wish to search for looking up the setlist'
 selection = ''
 print
-while selection != '1' or '2':
+while selection != '1' or '2' or '3':
     selection = raw_input('Enter 1 for artist name or 2 for venue: ')
 
     #Input search term type (artist, or city/venue)
@@ -54,10 +54,11 @@ while selection != '1' or '2':
         print
         print 'Spotify: '
         print spotArtist
-        playlistName = 'test'
-        playlistDescription = 'test'
-        username = spotify.me()['id']
+        playlistName = raw_input("Enter the name of your Playlist: ")
+        playlistDescription = raw_input("Enter a description for your Playlist: ")
         playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName, playlistDescription)
+        playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
+        print playlistID
         break
 
     #takes in year
@@ -72,6 +73,17 @@ while selection != '1' or '2':
         #print venue ID
         print cityID
         print SearchSetlist.getVenueSetlist(cityID, headers)
+        break
+
+    elif selection == '3':
+        name = raw_input("Enter artist name: ")
+        venue = raw_input('Enter the venue name: ')
+        year = raw_input("Enter a year: ")
+
+        #searches setlit.fm data for setlist id
+        setlistID = SearchSetlist.getFullSetlistID(name, year, venue, headers)
+        FullSetlist = SearchSetlist.getFullSetlist(setlistID, headers)
+
         break
 
     else:

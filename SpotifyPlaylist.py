@@ -12,14 +12,8 @@ import json
 spotify = spotipy.Spotify()
 tracks = []
 
-#spotify API
-spotCONSUMER_KEY = '3817588cd345435c86c9a60e6c0cb70a'
-spotCONSUMER_SECRET = 'ce6c55f9f3c343bb919d917257661a3b'
-spotREDIRECT_URI = 'http://setify.onuniverse.com/callback/'
-
-username = raw_input("Enter your username: ")
 token = util.prompt_for_user_token(
-    username,
+    username = "",
     scope = 'playlist-modify-private playlist-modify-public',
     #Enter Spotify API ID
     client_id ='3817588cd345435c86c9a60e6c0cb70a',
@@ -34,11 +28,20 @@ def createSpotifyToken(token):
     spotify = spotipy.Spotify(auth=token)
     return spotify
 
-def createSpotifyPlaylist(token, username, playlistName, playlistDescription):
-    playlists = spotify.user_playlist_create(username, playlistName,
-                                        playlistDescription)
-    return pprint.pprint(playlists)
-
 def searchTermsArtist(spotify, artistName):
     results = spotify.search(q='' + artistName, type='artist')
     return results
+
+def createSpotifyPlaylist(spotify, username, playlistName, playlistDescription):
+    public = True
+    playlists = spotify.user_playlist_create(user=username, public= True, name=playlistName)
+    return
+
+def getSpotifyPlaylistID(spotify, username, playlistName):
+    currentUserPlaylists = spotify.user_playlists(user=username)
+    for playList in currentUserPlaylists['items']:
+        #Filter through all playlists until we find one that matches
+        if playList['name'] == playlistName:
+            return playList['id']
+    #This should never happen if createPlaylist was ran before and was successful
+    return "Failed to find correct playlist"
