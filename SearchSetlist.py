@@ -11,17 +11,6 @@ import json
 
 import SpotifyPlaylist
 
-tracks = []
-
-#creates a list of song titles to be used for Spotify to search through
-def createSetlist(setlist):
-    #searches through the setlist information for the list of songs in the 'set' data
-    for key in setlist.get('sets').get('set'):
-        #finds the song titles listed in the setlist
-        for key in key.get('song'):
-            #adds the song title to the track list so the name can be searched in Spotify
-            tracks.append(key['adds']
-    return tracks
 
 #Get the MusicBrainz ID for the artist
 def getArtistID(header, name):
@@ -43,10 +32,16 @@ def getArtistSetlist(artistID, header):
             #Get the first setlist that contains more than 0 songs so to not
             #get back a list of a not performed concert yet
             if len(key.get('sets').get('set')) > 0:
-        #TODO: createSetlist(key)
                 return key
     else:
         return response
+
+def createSetlist(Setlist):
+    tracks = []
+    for key in Setlist.get('sets').get('set'):
+        for key in key.get('song'):
+            tracks.append(key['name'])
+        return tracks
 
 #Get the ID for the venue
 def getVenueID(header, name):

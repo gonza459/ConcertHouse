@@ -56,7 +56,10 @@ while selection != '1' or '2' or '3':
 
         print 'Setlist: '
         print artistID # debug
-        print SearchSetlist.getArtistSetlist(artistID, headers) #debug
+
+        artistSetlist = SearchSetlist.getArtistSetlist(artistID, headers) #debug
+        print artistSetlist
+        print SearchSetlist.createSetlist(artistSetlist)
         print
 
         #searches spotify data for info relating to artist name
