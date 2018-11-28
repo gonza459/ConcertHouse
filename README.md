@@ -1,4 +1,6 @@
-# ConcertHouse
+# Setify
+
+
 
 Setlist.fm API:  ecc895c8-fb79-4eab-be35-7d04744a15aa
 
@@ -17,10 +19,10 @@ Spotify API:
   https://api.setlist.fm/docs/1.0/json_Venue.html
 
 Spotipy tutorial
-  https://www.youtube.com/watch?v=tmt5SdvTqUI
+https://www.youtube.com/watch?v=tmt5SdvTqUI
 
 Spotify documentation
-  https://developer.spotify.com/documentation/general/guides/authorization-guide/
+https://developer.spotify.com/documentation/general/guides/authorization-guide/
 
 URI
 https://teamtreehouse.com/community/what-is-redirect-uri

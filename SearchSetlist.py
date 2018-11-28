@@ -13,6 +13,16 @@ import SpotifyPlaylist
 
 tracks = []
 
+#creates a list of song titles to be used for Spotify to search through
+def createSetlist(setlist):
+    #searches through the setlist information for the list of songs in the 'set' data
+    for key in setlist.get('sets').get('set'):
+        #finds the song titles listed in the setlist
+        for key in key.get('song'):
+            #adds the song title to the track list so the name can be searched in Spotify
+            tracks.append(key['adds']
+    return tracks
+
 #Get the MusicBrainz ID for the artist
 def getArtistID(header, name):
     #Replace any spaces with %20.
@@ -29,10 +39,11 @@ def getArtistSetlist(artistID, header):
     response = requests.get(url, headers=header, verify=True)
     data = response.json()
     if(response.ok):
-        #TODO: put in for loop to go through the pages so to get the full data of setlists
         for key in data['setlist']:
-            #Get the first setlist that contains more than 0 songs so to not get back a list of a not performed concert yet
+            #Get the first setlist that contains more than 0 songs so to not
+            #get back a list of a not performed concert yet
             if len(key.get('sets').get('set')) > 0:
+        #TODO: createSetlist(key)
                 return key
     else:
         return response
@@ -59,7 +70,7 @@ def getVenueSetlist(cityID, header):
     else:
         return response
 
-def getFullSetlistID(artistName, year, venue, header):
+def getSetlistID(artistName, year, venue, header):
     url = "https://api.setlist.fm/rest/1.0/search/setlists?artistName=" + artistName + "venueName=" + venue + "&year=" + year + "&p=1&sort=relevance"
     response = requests.get(url, headers = header, verify =True)
     data = response.json()
@@ -69,7 +80,7 @@ def getFullSetlistID(artistName, year, venue, header):
     else:
         return response
 
-def getFullSetlist(setlistID, header):
+def getSetlist(setlistID, header):
     url = "https://api.setlist.fm/rest/1.0/setlist/" + setlistID + "/setlists"
     response = requests.get(url, headers = header, verify =True)
     data = response.json()

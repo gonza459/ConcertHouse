@@ -32,16 +32,25 @@ def searchTermsArtist(spotify, artistName):
     results = spotify.search(q='' + artistName, type='artist')
     return results
 
-def createSpotifyPlaylist(spotify, username, playlistName, playlistDescription):
+def searchTracks(spotify, trackName):
+    results = spotify.search(q='' + trackName, type='track')
+    return results
+
+def createTrackList(spotify, username, playlistID, setlist):
+    trackIDs = []
+    #for track in setlist:
+        #track.IDs.append(searchTracks(self, track))
+    spotify.user_playlist_add_tracks(username, playlistID, trackIDs, position=None)
+    return
+
+def createSpotifyPlaylist(spotify, username, playlistName):
     public = True
     playlists = spotify.user_playlist_create(user=username, public= True, name=playlistName)
     return
 
 def getSpotifyPlaylistID(spotify, username, playlistName):
-    currentUserPlaylists = spotify.user_playlists(user=username)
-    for playList in currentUserPlaylists['items']:
-        #Filter through all playlists until we find one that matches
-        if playList['name'] == playlistName:
-            return playList['id']
-    #This should never happen if createPlaylist was ran before and was successful
-    return "Failed to find correct playlist"
+    currentPlaylists = spotify.user_playlists(user=username)
+    for playlist in currentPlaylists['items']:
+        #Filter through the user's playlists to find the matching playlsit name
+        if playlist['name'] == playlistName:
+            return playlist['id']
