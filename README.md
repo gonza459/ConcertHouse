@@ -1,6 +1,24 @@
 # Setify
 
+Samantha Gonzalez
+Student ID: 2282119
+Student Email: gonza459@mail.chapman.edu
+CPSC 353-01
+Setify
+Source Files:
+  -Setify.py
+  -SpotifyPlaylist.py
+  -SearchSetlist.py
 
+Instructions:
+	-run Setify.py
+  -Enter your Spotify username
+        -Follow the output instructions on the command line or simply copy and paste the URL of site you are redirected to into command line
+  -Enter 1 or 2 when prompted to either search for a setlist according
+  to an artist name or a venue name
+  -Enter the name of the respective search term
+  -When prompted, enter a playlist name for the playlist that will store the setlist songs
+      -The newly created playlist will appear in your Spotify account
 
 Setlist.fm API:  ecc895c8-fb79-4eab-be35-7d04744a15aa
 

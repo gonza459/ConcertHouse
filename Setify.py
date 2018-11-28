@@ -82,6 +82,15 @@ while selection != '1' or '2' or '3':
         #print venue ID
         print cityID #debug
         print SearchSetlist.getVenueSetlist(cityID, headers) # debug
+
+        playlistName = raw_input("Enter the name of your Playlist: ")
+
+        #Creates the playlist in the user's account
+        playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName)
+
+        #This retrieves the playlistID as jsut created by the user
+        playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
+        print playlistID #debug
         break
 
     #Search for most recent setlist according to artist name, venue name, and year
