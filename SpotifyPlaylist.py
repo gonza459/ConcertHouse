@@ -32,15 +32,25 @@ def searchTermsArtist(spotify, artistName):
     results = spotify.search(q='' + artistName, type='artist')
     return results
 
-def searchTracks(spotify, trackName):
-    results = spotify.search(q='' + trackName, type='track')
-    return results
+def searchTracks(spotify, artistName, trackName):
+    trackList = []
+    search = spotify.search(q= artistName + " " + trackName, type="track")
+    for i, t in enumerate(search['tracks']['items']):
+        tracks = (t['uri'])
+        if i == 0:
+            trackList.append(tracks)
+    return trackList
 
-def createTrackList(spotify, username, playlistID, setlist):
-    trackIDs = []
-    #for track in setlist:
-        #track.IDs.append(searchTracks(self, track))
-    spotify.user_playlist_add_tracks(username, playlistID, trackIDs, position=None)
+def createTrackList(spotify, username, artistName, setlist):
+    trackIds = []
+    for i in setlist:
+        trackID = searchTracks(spotify, artistName, i)
+        trackIds.append(trackID)
+    return trackIds
+
+def addTrackList(spotify, username, playlistID, trackIDs):
+    for trackID in trackIDs:
+        spotify.user_playlist_add_tracks(username, playlistID, trackID, position=None)
     return
 
 def createSpotifyPlaylist(spotify, username, playlistName):
@@ -53,4 +63,4 @@ def getSpotifyPlaylistID(spotify, username, playlistName):
     for playlist in currentPlaylists['items']:
         #Filter through the user's playlists to find the matching playlsit name
         if playlist['name'] == playlistName:
-            return playlist['id']
+            return playlist['uri']

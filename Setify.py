@@ -12,8 +12,6 @@ import json
 import SpotifyPlaylist
 import SearchSetlist
 
-set = []
-
 #spotify API
 token = util.prompt_for_user_token(
     username = raw_input("Enter your username: "),
@@ -58,15 +56,13 @@ while selection != '1' or '2' or '3':
         print artistID # debug
 
         artistSetlist = SearchSetlist.getArtistSetlist(artistID, headers) #debug
-        print artistSetlist
-        print SearchSetlist.createSetlist(artistSetlist)
+        setList = SearchSetlist.createSetlist(artistSetlist)
+        print setList
         print
+        #Creates list of track ids from the songs from the setlist to be searched in Spotify
+        trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
 
         #searches spotify data for info relating to artist name
-        spotArtist = SpotifyPlaylist.searchTermsArtist(spotify, name)
-        print 'Spotify: '
-        print spotArtist #debug
-
         playlistName = raw_input("Enter the name of your Playlist: ")
 
         #Creates the playlist in the user's account
@@ -75,6 +71,9 @@ while selection != '1' or '2' or '3':
         #This retrieves the playlistID as jsut created by the user
         playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
         print playlistID #debug
+
+        SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
+
         break
 
     #Search for most recent setlist according to venue name
@@ -82,9 +81,18 @@ while selection != '1' or '2' or '3':
         venue = raw_input('Enter the venue name: ')
         #searches setlit.fm data for venue id
         cityID = SearchSetlist.getVenueID(headers, venue)
+        name = SearchSetlist.getVenueArtistName(cityID, headers)
+        print name
         #print venue ID
         print cityID #debug
-        print SearchSetlist.getVenueSetlist(cityID, headers) # debug
+
+        venueSetlist = SearchSetlist.getVenueSetlist(cityID, headers) # debug
+        print venueSetlist
+        setList = SearchSetlist.createSetlist(venueSetlist)
+        print setList
+        print
+        #Creates list of track ids from the songs from the setlist to be searched in Spotify
+        trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
 
         playlistName = raw_input("Enter the name of your Playlist: ")
 
@@ -94,6 +102,8 @@ while selection != '1' or '2' or '3':
         #This retrieves the playlistID as jsut created by the user
         playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
         print playlistID #debug
+
+        SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
         break
 
     #Search for most recent setlist according to artist name, venue name, and year
