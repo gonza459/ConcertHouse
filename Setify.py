@@ -52,13 +52,10 @@ while selection != '1' or '2' or '3':
         #Searches setlist.fm data for artist mbid
         artistID = SearchSetlist.getArtistID(headers, name)
 
-        print 'Setlist: '
-        print artistID # debug
-
         artistSetlist = SearchSetlist.getArtistSetlist(artistID, headers) #debug
         setList = SearchSetlist.createSetlist(artistSetlist)
         print setList
-        print
+
         #Creates list of track ids from the songs from the setlist to be searched in Spotify
         trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
 
@@ -70,9 +67,12 @@ while selection != '1' or '2' or '3':
 
         #This retrieves the playlistID as jsut created by the user
         playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
-        print playlistID #debug
 
+        #Adds the songs to the playlist on the user's spotify account
         SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
+
+        print "Your playlist is now in your Spotify account and ready for you to enjoy!"
+        runAgain = raw_input ("Would you like to make another playlist?")
 
         break
 
@@ -81,29 +81,39 @@ while selection != '1' or '2' or '3':
         venue = raw_input('Enter the venue name: ')
         #searches setlit.fm data for venue id
         cityID = SearchSetlist.getVenueID(headers, venue)
+        #gets the name of the artist who performed the most recent concert at the searched veue
         name = SearchSetlist.getVenueArtistName(cityID, headers)
-        print name
-        #print venue ID
-        print cityID #debug
 
-        venueSetlist = SearchSetlist.getVenueSetlist(cityID, headers) # debug
-        print venueSetlist
-        setList = SearchSetlist.createSetlist(venueSetlist)
-        print setList
+        print "The artist of the concert at this venue was " + name
+        makePlaylist = raw_input("Would you like to still make a playlist of this artist's setlist? ")
         print
-        #Creates list of track ids from the songs from the setlist to be searched in Spotify
-        trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
 
-        playlistName = raw_input("Enter the name of your Playlist: ")
+        if makePlaylist == 'yes':
+            #reteives the setlist based on the venue and artistname
+            venueSetlist = SearchSetlist.getVenueSetlist(cityID, headers)
 
-        #Creates the playlist in the user's account
-        playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName)
+            #creates a list of the songs from the venue setlist retieved
+            setList = SearchSetlist.createSetlist(venueSetlist)
+            print
+            #Creates list of track ids from the songs from the setlist to be searched in Spotify
+            trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
 
-        #This retrieves the playlistID as jsut created by the user
-        playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
-        print playlistID #debug
+            playlistName = raw_input("Enter the name of your Playlist: ")
 
-        SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
+            #Creates the playlist in the user's account
+            playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName)
+
+            #This retrieves the playlistID as jsut created by the user
+            playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
+
+            #Adds the songs to the playlist on the user's spotify account
+            SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
+
+            print "Your playlist is now in your Spotify account and ready for you to enjoy!"
+            runAgain = raw_input ("Would you like to make another playlist? ")
+
+        elif makePlaylist == 'no':
+            print "Thank you for your search."
         break
 
     #Search for most recent setlist according to artist name, venue name, and year
@@ -114,8 +124,31 @@ while selection != '1' or '2' or '3':
 
         #searches setlit.fm data for setlist id
         setlistID = SearchSetlist.getSetlistID(name, year, venue, headers)
+        print setlistID
+
         #takes setlistID and obtains the setlist data stored here
         FullSetlist = SearchSetlist.getSetlist(setlistID, headers)
+        print FullSetlist
+        setList = SearchSetlist.createSetlist(FullSetlist)
+        print setList
+
+        #Creates list of track ids from the songs from the setlist to be searched in Spotify
+        trackList = SpotifyPlaylist.createTrackList(spotify, username, name, setList)
+
+        #searches spotify data for info relating to artist name
+        playlistName = raw_input("Enter the name of your Playlist: ")
+
+        #Creates the playlist in the user's account
+        playlist = SpotifyPlaylist.createSpotifyPlaylist(spotify, username, playlistName)
+
+        #This retrieves the playlistID as jsut created by the user
+        playlistID = SpotifyPlaylist.getSpotifyPlaylistID(spotify, username, playlistName)
+
+        #Adds the songs to the playlist on the user's spotify account
+        SpotifyPlaylist.addTrackList(spotify, username, playlistID, trackList)
+
+        print "Your playlist is now in your Spotify account and ready for you to enjoy!"
+        runAgain = raw_input ("Would you like to make another playlist? ")
 
         break
 

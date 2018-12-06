@@ -78,7 +78,9 @@ def getVenueArtistName(cityID, header):
 
 
 def getSetlistID(artistName, year, venue, header):
-    url = "https://api.setlist.fm/rest/1.0/search/setlists?artistName=" + artistName + "venueName=" + venue + "&year=" + year + "&p=1&sort=relevance"
+    artist = artistName.replace(" ", "%20")
+    city = venue.replace(" ", "%20")
+    url = "https://api.setlist.fm/rest/1.0/search/setlists?artistName=" + artist + "&year=" + year + "&p=1&venueName=" + city + "&p=1&sort=relevance"
     response = requests.get(url, headers = header, verify =True)
     data = response.json()
     if(response.ok):
@@ -88,12 +90,10 @@ def getSetlistID(artistName, year, venue, header):
         return response
 
 def getSetlist(setlistID, header):
-    url = "https://api.setlist.fm/rest/1.0/setlist/" + setlistID + "/setlists"
+    url = "https://api.setlist.fm/rest/1.0/setlist/" + setlistID
     response = requests.get(url, headers = header, verify =True)
     data = response.json()
     if(response.ok):
-        for key in data['setlist']:
-            if len(key.get('sets').get('set')) > 0:
-                return key
+        return data
     else:
         return response
