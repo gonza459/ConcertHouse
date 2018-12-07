@@ -11,14 +11,19 @@ Source Files:
   -SearchSetlist.py
 
 Instructions:
-	-run Setify.py
+  -Install requests and spotipy library
+	-compile and run Setify.py
   -Enter your Spotify username
         -Follow the output instructions on the command line or simply copy and paste the URL of site you are redirected to into command line
-  -Enter 1 or 2 when prompted to either search for a setlist according
-  to an artist name or a venue name
+  -Enter 1 or 2 or 3 when prompted to either search for a setlist according
+  to an artist name or a venue name or a specific setlist
+        -The specific setlist will ask for an artist name, a venue name, and a year the concert was performed
   -Enter the name of the respective search term
   -When prompted, enter a playlist name for the playlist that will store the setlist songs
       -The newly created playlist will appear in your Spotify account
+  -When you are done creating a playlist, you will be prompted if you would like to make another
+      -If you would, please respond yes and you will start the search process again
+      -If no, simply respond no and you will exit the program
 
 Setlist.fm API:  ecc895c8-fb79-4eab-be35-7d04744a15aa
 
